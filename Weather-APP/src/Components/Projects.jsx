@@ -9,8 +9,8 @@ const projects = [
       "A beautifully designed weather app that displays the weather for any country in a clean and modern interface.",
     image: "/projects/WeatherApp.PNG",
     tags: ["React", "TailwindCSS"],
-    demoUrl: "",
-    githubUrl: "",
+    demoUrl: "https://weather-app-wheat-ten-84.vercel.app/",
+    githubUrl: "https://github.com/mbake8205/Weather-App",
   },
 
   {
@@ -20,8 +20,8 @@ const projects = [
       "A movie app built using the TMDB API, allowing users to explore movies with an attractive and responsive design.",
     image: "/projects/MovieApp.PNG",
     tags: ["React", "TailwindCSS"],
-    demoUrl: "",
-    githubUrl: "",
+    demoUrl: "https://movie-app-pi-black.vercel.app/",
+    githubUrl: "https://github.com/mbake8205/Movie-app",
   },
 
   {
@@ -31,8 +31,8 @@ const projects = [
       "A user-friendly and visually appealing e-commerce app that provides a smooth shopping experience.",
     image: "/projects/Ecommerce.PNG",
     tags: ["React", "TailwindCSS", "Next.js", "Stripe"],
-    demoUrl: "",
-    githubUrl: "",
+    demoUrl: "https://ecommerce-pink-psi-13.vercel.app/",
+    githubUrl: "https://github.com/mbake8205/Ecommerce",
   },
 
   {
@@ -43,7 +43,7 @@ const projects = [
     image: "/projects/Portfolio.PNG",
     tags: ["React", "TailwindCSS"],
     demoUrl: "",
-    githubUrl: "",
+    githubUrl: "https://github.com/mbake8205/react-portfolio",
   },
 ];
 
