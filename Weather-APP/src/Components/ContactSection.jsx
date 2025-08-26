@@ -1,4 +1,3 @@
-import { Toast } from "@radix-ui/react-toast";
 import {
   Facebook,
   Instagram,
@@ -8,21 +7,38 @@ import {
   Phone,
   Send,
 } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 const ContactSection = () => {
-  
-    const handleSubmit = (e) => {
-      e.preventDeafault()
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [loading, setLoading] = useState(false);
 
-      setTimeout(() => {
-        Toast({
-          title: "Message sent!",
-          description: "Thank you for your message. I'll get back to you soon."
-        })
-          
-      }, 1500);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Failed to send message");
+      }
+
+      alert("✅ Message sent! I'll get back to you soon.");
+      setForm({ name: "", email: "", message: "" }); // reset form
+    } catch (err) {
+      console.error(err);
+      alert("❌ " + err.message);
+    } finally {
+      setLoading(false);
     }
+  };
 
   return (
     <div id="contact" className="py-24 px-4 relative bg-secondary/30">
@@ -32,16 +48,14 @@ const ContactSection = () => {
         </h2>
 
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Have a project in mind or want to collaborate? Feel free to react out.
+          Have a project in mind or want to collaborate? Feel free to reach out.
           I'm always open to discussing new opportunities.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Left Column - Info */}
           <div className="space-y-8">
-            <h3 className="text-2xl font-semibold mb-6">
-              {" "}
-              Contact Information
-            </h3>
+            <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
             <div className="space-y-6 justify-center">
               <div className="flex items-start space-x-4">
                 <div className="p-3 rounded-full bg-primary/10">
@@ -50,7 +64,7 @@ const ContactSection = () => {
                 <div>
                   <h4 className="font-medium">Email</h4>
                   <a
-                    href="mailto:"
+                    href="mailto:Mbake8205@gmail.com"
                     className="text-muted-foreground hover:text-primary transition-colors"
                   >
                     Mbake8205@gmail.com
@@ -62,10 +76,8 @@ const ContactSection = () => {
                   <Phone className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium"> Phone</h4>
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    +20 1095015820
-                  </a>
+                  <h4 className="font-medium">Phone</h4>
+                  <span className="text-muted-foreground">+20 1095015820</span>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
@@ -73,13 +85,8 @@ const ContactSection = () => {
                   <MapPin className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium">Email</h4>
-                  <a
-                    href="mailto:"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    Egypt, Cairo
-                  </a>
+                  <h4 className="font-medium">Location</h4>
+                  <span className="text-muted-foreground">Egypt, Cairo</span>
                 </div>
               </div>
             </div>
@@ -110,24 +117,24 @@ const ContactSection = () => {
               </div>
             </div>
           </div>
-          <div className="bg-card p-8 rounded-lg shadow-xs">
-            <h3 className="text-2xl font-semibold mb-6"> Send a Message</h3>
 
-            <form className="space-y-6">
+          {/* Right Column - Form */}
+          <div className="bg-card p-8 rounded-lg shadow-xs">
+            <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium mb-2"
-                >
-                  {" "}
-                  Your Name{" "}
+                <label htmlFor="name" className="block text-sm font-medium mb-2">
+                  Your Name
                 </label>
                 <input
                   type="text"
                   id="name"
                   name="name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
                   required
-                  placeholder="mohamed..."
+                  placeholder="Mohamed..."
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
                 />
               </div>
@@ -136,13 +143,14 @@ const ContactSection = () => {
                   htmlFor="email"
                   className="block text-sm font-medium mb-2"
                 >
-                  {" "}
-                  Your Email{" "}
+                  Your Email
                 </label>
                 <input
                   type="email"
                   id="email"
                   name="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
                   required
                   placeholder="mohamed@gmail.com"
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
@@ -153,12 +161,13 @@ const ContactSection = () => {
                   htmlFor="message"
                   className="block text-sm font-medium mb-2"
                 >
-                  {" "}
-                  Your Message{" "}
+                  Your Message
                 </label>
                 <textarea
                   id="message"
                   name="message"
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
                   required
                   placeholder="Hello, I'd like to talk about..."
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary resize-none"
@@ -166,10 +175,11 @@ const ContactSection = () => {
               </div>
               <button
                 type="submit"
+                disabled={loading}
                 className="cosmic-button w-full flex items-center justify-center gap-2"
               >
-                Send Message
-                <Send size={16}/>
+                {loading ? "Sending..." : "Send Message"}
+                <Send size={16} />
               </button>
             </form>
           </div>
